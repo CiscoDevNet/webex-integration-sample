@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Integration",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceRoot}/server.js",
+            "stopOnEntry": false,
+            "args": [],
+            "cwd": "${workspaceRoot}",
+            "preLaunchTask": null,
+            "runtimeExecutable": null,
+            "runtimeArgs": [
+                "--nolazy"
+            ],
+            "env": {
+                "NODE_ENV": "development",
+                "DEBUG": "oauth*",
+                "REDIRECT_URI": "http://localhost:8080/oauth", 
+                "CLIENT_ID": "C9901101c66249d7e6b7cb174941a400e2e01f7d80d0b1f08b11665bad5cbb66d",
+                "CLIENT_SECRET": "aaa8f0304a9b49a1654b74a14faf7b939481341ab09c9e47bab9d7c1e54e62a7"
+            },
+            "externalConsole": false,
+            "sourceMaps": false,
+            "outDir": null
+        }
+    ]
+}
