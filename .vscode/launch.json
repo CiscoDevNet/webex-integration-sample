@@ -17,9 +17,10 @@
             "env": {
                 "NODE_ENV": "development",
                 "DEBUG": "oauth*",
+                "PORT": "8080",
                 "REDIRECT_URI": "http://localhost:8080/oauth", 
-                "CLIENT_ID": "C9901101c66249d7e6b7cb174941a400e2e01f7d80d0b1f08b11665bad5cbb66d",
-                "CLIENT_SECRET": "aaa8f0304a9b49a1654b74a14faf7b939481341ab09c9e47bab9d7c1e54e62a7"
+                "CLIENT_ID": "C4ae9568c6cf4576abbc58c183b69f466c6ea6a7d3b8f0f22a60d6775f36d5aed",
+                "CLIENT_SECRET": "772c2882806539bee681288640608f5ec2e6afbc11010e74d8bd11c941893096"
             },
             "externalConsole": false,
             "sourceMaps": false,

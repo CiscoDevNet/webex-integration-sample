@@ -23,8 +23,8 @@ var app = express();
 // Step 0: create a Spark integration from https://developer.ciscospark.com/add-integration.html
 //   - then fill in your Integration properties below
 //
-var clientId = process.env.CLIENT_ID || "C9901101c66249d7e6b7cb174941a400e2e01f7d80d0b1f08b11665bad5cbb66d";
-var clientSecret = process.env.CLIENT_SECRET || "aaa8f0304a9b49a1654b74a14faf7b939481341ab09c9e47bab9d7c1e54e62a7";
+var clientId = process.env.CLIENT_ID || "C4ae9568c6cf4576abbc58c183b69f466c6ea6a7d3b8f0f22a60d6775f36d5aed";
+var clientSecret = process.env.CLIENT_SECRET || "772c2882806539bee681288640608f5ec2e6afbc11010e74d8bd11c941893096";
 var redirectURI = process.env.REDIRECT_URI || "http://localhost:8080/oauth"; // where your integration is waiting for Cisco Spark to redirect and send the authorization code
 var state = process.env.STATE || "CiscoDevNet"; // state can be used for security and/or correlation purposes
 var scopes = "spark:people_read"; // extend permission with Spark OAuth scopes required by your example, supported scopes are: https://developer.ciscospark.com/add-integration.html
@@ -37,10 +37,10 @@ var scopes = "spark:people_read"; // extend permission with Spark OAuth scopes r
 // Initiate the OAuth flow from the 'index.ejs' template  
 // ------------------------------------------------------------- 
 // -- Comment this section to initiate the flow from  static html page
-var initiateURL = "https://api.ciscospark.com/v1/authorize?" 
-    + "client_id=" + clientId 
+var initiateURL = "https://api.ciscospark.com/v1/authorize?"
+    + "client_id=" + clientId
     + "&response_type=code"
-    + "&redirect_uri=" + encodeURIComponent(redirectURI) 
+    + "&redirect_uri=" + encodeURIComponent(redirectURI)
     + "&scope=" + encodeURIComponent(scopes)
     + "&state=" + state;
 var read = require("fs").readFileSync;
@@ -53,7 +53,7 @@ app.get("/index.html", function (req, res) {
     res.send(compiled);
 });
 app.get("/", function (req, res) {
-     res.redirect("/index.html");
+    res.redirect("/index.html");
 });
 // -------------------------------------------------------------
 // Statically serve the "/www" directory
@@ -71,7 +71,7 @@ app.get("/oauth", function (req, res) {
 
     // Did the user decline
     if (req.query.error) {
-       if (req.query.error == "access_denied") {
+        if (req.query.error == "access_denied") {
             debug("user declined");
             res.send("<h1>OAuth Integration could not complete</h1><p>Got your NO, ciao.</p>");
             return;
@@ -134,6 +134,10 @@ app.get("/oauth", function (req, res) {
         if (response.statusCode != 200) {
             debug("access token not issued with status code: " + response.statusCode);
             switch (response.statusCode) {
+                case 400:
+                    var responsePayload = JSON.parse(response.body);
+                    res.send("<h1>OAuth Integration could not complete</h1><p>Bad request. <br/>" + responsePayload.message + "</p>");
+                    break;
                 case 401:
                     res.send("<h1>OAuth Integration could not complete</h1><p>OAuth authentication error. Ask the service contact to check the secret.</p>");
                     break;
@@ -152,9 +156,12 @@ app.get("/oauth", function (req, res) {
             return;
         }
 
+        // [Optional] Store tokens for future use
+        storeTokens(json.access_token,  json.expires_in, json.refresh_token, json.refresh_token_expires_in);
+
         // Cisco Spark OAuth flow completed
-        debug("OAuth flow completed, for state: " + state, ", access token: " + json.access_token);
-        oauthFlowCompleted(state, json.access_token, json.refresh_token, res);
+        debug("OAuth flow completed, fetched access token: " + json.access_token);
+        oauthFlowCompleted(json.access_token, res);
     });
 });
 
@@ -167,7 +174,7 @@ app.get("/oauth", function (req, res) {
 // some optional activities to perform here: 
 //    - associate the issued Spark access token to a user through the state (acting as a Correlation ID)
 //    - store the refresh token (valid 90 days) to reissue later a new access token (valid 14 days)
-function oauthFlowCompleted(state, access_token, refresh_token, res) {
+function oauthFlowCompleted(access_token, res) {
 
     //
     // Custom logic below
@@ -222,6 +229,58 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
         res.send(compiled);
     });
 }
+
+// The idea here is to store the access token for future use, and the expiration dates and refresh_token to have Cisco Spark issue a new access token
+function storeTokens(access_token, expires_in, refresh_token, refresh_token_expires_in) {
+
+    // Store the token in some secure backend
+    debug("TODO: store tokens and expiration dates in a safe place");
+
+    // For demo purpose, we'll NOW ask for a refreshed token
+    refreshAccessToken(refresh_token);
+}
+
+//
+// Example of Refresh token usage
+//
+function refreshAccessToken(refresh_token) {
+
+    var options = {
+        method: "POST",
+        url: "https://api.ciscospark.com/v1/access_token",
+        headers: {
+            "content-type": "application/x-www-form-urlencoded"
+        },
+        form: {
+            grant_type: "refresh_token",
+            client_id: clientId,
+            client_secret: clientSecret,
+            refresh_token: refresh_token
+        }
+    };
+    request(options, function (error, response, body) {
+        if (error) {
+            debug("could not reach Cisco Spark to refresh access token");
+            return;
+        }
+
+        if (response.statusCode != 200) {
+            debug("access token not issued with status code: " + response.statusCode);
+            return;
+        }
+
+        // Check payload
+        var json = JSON.parse(body);
+        if ((!json) || (!json.access_token) || (!json.expires_in) || (!json.refresh_token) || (!json.refresh_token_expires_in)) {
+            debug("could not parse response");
+            return;
+        }
+
+        // Refresh token obtained
+        debug("newly issued access token: " + json.access_token);
+    });
+}
+
 
 
 // Starts the Cisco Spark Integration

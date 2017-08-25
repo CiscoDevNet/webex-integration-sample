@@ -2,18 +2,15 @@
 
 This Spark Integration example illustrates an OAuth Grant flow at the end of which the Spark User who granted permission will see his full name displayed.
 
-It comes as a companion to the DevNet Learning Module about Spark integrations.
+It comes as a companion to the [DevNet Learning Lab about creating Cisco Spark OAuth integrations](https://learninglabs.cisco.com/tracks/collab-cloud/spark-apps/collab-spark-intl/step/1).
 
 ![](docs/img/OAuth-Flow-Sumpup.png)
 
 
 This example leverages a pre-registered Spark integration with a Redirect URL on localhost so that it can be run with minimal setup.
-The flow initiates at http://localhost:8080/, and Cisco Spark redirects to http://localhost:8080/oauth
+The flow initiates at http://localhost:8080/, and Cisco Spark Oauth Flow redirects to http://localhost:8080/oauth
 
 In real world, you'll register and deploy your integration on a public URL, check the guide below to [register your own integration](#https://github.com/CiscoDevNet/spark-integration-sample#to-register-your-own-spark-oauth-integration).
-
-You can also [experiment this Spark integration live](https://spark-integration-on-heroku.herokuapp.com). 
-Give the example 10 to 30 seconds to start as it is deployed as Heroku Free Dynos.
 
 
 ## Run it locally
@@ -22,10 +19,10 @@ This example leverages a pre-registered Spark integration with a Redirect URL on
 
 ``` bash
 > git clone https://github.com/CiscoDevNet/spark-integration-sample
-> cd spark-oauth-sampl
+> cd spark-integration-sample
 > npm install
 > make
-DEBUG=oauth* REDIRECT_URI="http://localhost:8080/oauth" CLIENT_ID="C9901101c66249d7e6b7cb174941a400e2e01f7d80d0b1f08b11665bad5cbb66d" CLIENT_SECRET="aaa8f0304a9b49a1654b74a14faf7b939481341ab09c9e47bab9d7c1e54e62a7" node server.js
+DEBUG=oauth* REDIRECT_URI="http://localhost:8080/oauth" CLIENT_ID="C4ae9568c6cf4576abbc58c183b69f466c6ea6a7d3b8f0f22a60d6775f36d5aed" CLIENT_SECRET="772c2882806539bee681288640608f5ec2e6afbc11010e74d8bd11c941893096" node server.js
 oauth Cisco Spark OAuth Integration started on port: 8080 +0ms
 ```
 
@@ -60,13 +57,13 @@ Go to [Spark for developers](https://developer.ciscospark.com) portal, click App
 
 ![](docs/img/OAuth-Flow-Step0-create-integration.png)
 
-Select all OAuth scopes by default, or simply go with the limited set of permissions you need. 
-Note that even though we chose ALL scopes for now, we will [refine the scopes later in our code](https://github.com/CiscoDevNet/spark-integration-sample/blob/master/server.js#L25) in otder to confirm to our code's real needs.
+Select all OAuth scopes by default, or simply go with the limited set of permissions your code really needs. 
+Note that even though we chose ALL scopes for now, we will [refine the scopes later in our code](https://github.com/CiscoDevNet/spark-integration-sample/blob/master/server.js#L30) in order to conform to our code's real needs.
 
 ![](docs/img/OAuth-Flow-Step0-select-all-scopes.png)
 
 Click save, and report your client id and client secret:
-- into [your code](https://github.com/CiscoDevNet/spark-integration-sample/blob/master/server.js#L21),
+- into [your code](https://github.com/CiscoDevNet/spark-integration-sample/blob/master/server.js#L26),
 - or set these env variables in a command shell: CLIENT\_ID, CLIENT\_SECRET, REDIRECT\_URI, STATE
 - or update the run command in your Project's [Makefile](https://github.com/CiscoDevNet/spark-integration-sample/blob/master/Makefile).
 
@@ -86,9 +83,4 @@ For example, add the “Jira Integration” (https://depot.ciscospark.com/integr
 Spark integrations are a way for your apps to request permission to invoke the Spark APIs on behalf of other Spark users. 
 The process used to request permission is called an OAuth Grant Flow, and is documented in the Integrations (https://developer.ciscospark.com/authentication.html ) guide. 
 
-You can experiment the flow in DevNet Learning lab [“Understand the OAuth Grant flow of Spark Integrations”]().
-
-
-
- 
-
+You can experiment the flow in DevNet Learning lab [“Understand the OAuth Grant flow of Spark Integrations”](https://learninglabs.cisco.com/tracks/collab-cloud/business-messaging/collab-spark-auth/step/1).
