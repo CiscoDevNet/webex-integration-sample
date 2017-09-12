@@ -72,18 +72,24 @@ app.get("/oauth", function (req, res) {
     // Did the user decline
     if (req.query.error) {
         if (req.query.error == "access_denied") {
-            debug("user declined");
+            debug("user declined, received err: " + req.query.error);
             res.send("<h1>OAuth Integration could not complete</h1><p>Got your NO, ciao.</p>");
             return;
         }
 
-        if (req.query.error == "server_error") {
-            debug("server error");
-            res.send("<h1>OAuth Integration could not complete</h1><p>Cisco Spark send a Server Error, Auf Wiedersehen.</p>");
+        if (req.query.error == "invalid_scope") {
+            debug("wrong scope requested, received err: " + req.query.error);
+            res.send("<h1>OAuth Integration could not complete</h1><p>The application is requesting an invalid scope, Bye bye.</p>");
             return;
         }
 
-        debug("unknown error: " + req.query.error);
+        if (req.query.error == "server_error") {
+            debug("server error, received err: " + req.query.error);
+            res.send("<h1>OAuth Integration could not complete</h1><p>Cisco Spark sent a Server Error, Auf Wiedersehen.</p>");
+            return;
+        }
+
+        debug("received err: " + req.query.error);
         res.send("<h1>OAuth Integration could not complete</h1><p>Error case not implemented, au revoir.</p>");
         return;
     }
