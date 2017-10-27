@@ -1,6 +1,6 @@
 {
   "name": "spark-integration-sample",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "an example of Cisco Spark Integration (OAuth flow) in NodeJS",
   "main": "server.js",
   "scripts": {
@@ -9,9 +9,9 @@
   "author": "Stève Sfartz (Cisco DevNet)",
   "license": "MIT",
   "dependencies": {
-    "debug": "^2.2.0",
-    "ejs": "^2.5.2",
-    "express": "^4.14.0",
-    "request": "^2.75.0"
+    "debug": "^3.1.0",
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "request": "^2.83.0"
   }
 }

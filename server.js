@@ -25,7 +25,8 @@ var app = express();
 //
 var clientId = process.env.CLIENT_ID || "C4ae9568c6cf4576abbc58c183b69f466c6ea6a7d3b8f0f22a60d6775f36d5aed";
 var clientSecret = process.env.CLIENT_SECRET || "772c2882806539bee681288640608f5ec2e6afbc11010e74d8bd11c941893096";
-var redirectURI = process.env.REDIRECT_URI || "http://localhost:8080/oauth"; // where your integration is waiting for Cisco Spark to redirect and send the authorization code
+var port = process.env.PORT || 8080;
+var redirectURI = process.env.REDIRECT_URI || `http://localhost:${port}/oauth`; // where your integration is waiting for Cisco Spark to redirect and send the authorization code
 var state = process.env.STATE || "CiscoDevNet"; // state can be used for security and/or correlation purposes
 var scopes = "spark:people_read"; // extend permission with Spark OAuth scopes required by your example, supported scopes are: https://developer.ciscospark.com/add-integration.html
 
@@ -45,7 +46,7 @@ var initiateURL = "https://api.ciscospark.com/v1/authorize?"
     + "&state=" + state;
 var read = require("fs").readFileSync;
 var join = require("path").join;
-var str = read(join(__dirname, '/www/initiate.ejs'), 'utf8');
+var str = read(join(__dirname, '/www/index.ejs'), 'utf8');
 var ejs = require("ejs");
 var compiled = ejs.compile(str)({ "link": initiateURL }); // inject the link into the template
 app.get("/index.html", function (req, res) {
@@ -55,6 +56,7 @@ app.get("/index.html", function (req, res) {
 app.get("/", function (req, res) {
     res.redirect("/index.html");
 });
+
 // -------------------------------------------------------------
 // Statically serve the "/www" directory
 // WARNING: Do not move the 2 lines of code below, as we need this exact precedance order for the static and dynamic HTML generation to work correctly all together
@@ -228,19 +230,23 @@ function oauthFlowCompleted(access_token, res) {
         }
 
         // Uncomment to send feedback via static HTML code 
-        //res.send("<h1>OAuth Integration example for Cisco Spark (static HTML)</h1><p>So happy to meet, " + json.displayName + " !</p>");
+        // res.send("<h1>OAuth Integration example for Cisco Spark (static HTML)</h1><p>So happy to meet, " + json.displayName + " !</p>");
         // OR leverage an EJS template
+        var disconnectURL = "https://idbroker.webex.com/idb/oauth2/v1/logout?"
+        + "goto=" + encodeURIComponent(`http://localhost:${port}`)
+        + "&token=" + access_token;
         var str = read(join(__dirname, '/www/display-name.ejs'), 'utf8');
-        var compiled = ejs.compile(str)({ "displayName": json.displayName });
+        var compiled = ejs.compile(str)({ "displayName": json.displayName });        
         res.send(compiled);
     });
 }
+
 
 // The idea here is to store the access token for future use, and the expiration dates and refresh_token to have Cisco Spark issue a new access token
 function storeTokens(access_token, expires_in, refresh_token, refresh_token_expires_in) {
 
     // Store the token in some secure backend
-    debug("TODO: store tokens and expiration dates in a safe place");
+    debug("TODO: store tokens and expiration dates");
 
     // For demo purpose, we'll NOW ask for a refreshed token
     refreshAccessToken(refresh_token);
@@ -290,7 +296,6 @@ function refreshAccessToken(refresh_token) {
 
 
 // Starts the Cisco Spark Integration
-var port = process.env.OVERRIDE_PORT || process.env.PORT || 8080;
 app.listen(port, function () {
     debug("Cisco Spark OAuth Integration started on port: " + port);
 });
