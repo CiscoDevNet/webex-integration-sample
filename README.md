@@ -107,9 +107,9 @@ Check the DevNet learning lab: ['Deploy a Cisco Spark Integration'](https://lear
 Spark Apps incarn Cisco Spark’s extensibility. 
 
 By creating custom Spark apps, developers can tie together existing software with Cisco Spark and instantly promote their Apps. 
-For example, add the “Jira Integration” (https://depot.ciscospark.com/integrations/Y2lzY29zcGFyazovL3VzL0FQUExJQ0FUSU9OLzQwYjk2ZTQzLTZkNmQtNDJjZS1iODk0LWU0MmVhNWJjMDJmNA) to Rooms and your teams will be notified as Jira issues (whether EPIC, Story, Task or Bugs) are updated.
+For example, add the [“Jira Integration”](https://depot.ciscospark.com/integrations/Y2lzY29zcGFyazovL3VzL0FQUExJQ0FUSU9OLzQwYjk2ZTQzLTZkNmQtNDJjZS1iODk0LWU0MmVhNWJjMDJmNA) to Rooms and your teams will be notified as Jira issues (whether EPIC, Story, Task or Bugs) are updated.
 
 Spark integrations are a way for your apps to request permission to invoke the Spark APIs on behalf of other Spark users. 
-The process used to request permission is called an OAuth Grant Flow, and is documented in the Integrations (https://developer.ciscospark.com/authentication.html ) guide. 
+The process used to request permission is called an OAuth Grant Flow, and is documented in the [Integrations guide] (https://developer.ciscospark.com/authentication.html). 
 
 You can experiment the flow in DevNet Learning lab [“Understand the OAuth Grant flow of Spark Integrations”](https://learninglabs.cisco.com/tracks/collab-cloud/business-messaging/collab-spark-auth/step/1).
