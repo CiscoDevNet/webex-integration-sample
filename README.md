@@ -46,7 +46,7 @@ The integration custom code logic asks Cisco Spark for your Person details and d
 To learn more about Cisco Spark Integration, [read the reference documentation](https://developer.ciscospark.com/authentication.html).
 
 In the example above, we were running a pre-registered OAuth integration running on port 8080.
-Let's now register a new Cisco Spark integration that we will be running on port 9090.
+Let's now register a new Cisco Spark integration that we will be running on port **9090**.
 
 Go to [Spark for developers](https://developer.ciscospark.com) portal, click 'Apps', 'add Apps', and then [create an integration](https://developer.ciscospark.com/add-integration.html).
 
@@ -56,7 +56,7 @@ Fill the form fields:
 - **Support email**: a valid email address for Cisco Spark operations team to reach to you if necessary,
 - **App Icon**: an URL pointing to an image with a resolution of 512x512 pixels minimum. Feel free to use this provided sample for now: [https://bit.ly/SparkIntegration-512x512](https://bit.ly/SparkIntegration-512x512)
 - **Redirect URI**: enter `http://localhost:9090/oauth` since this is the URL at which the provided code sample will be listening on your local machine. More to come in the next steps if this lab
-- **Scopes**: select the `spark:people_read` and `spark:rooms_read` scopes. 
+- **Scopes**: select the `spark:people_read` and `spark:rooms_read` scopes.
 
 ![](docs/img/OAuth-Flow-Step0-create-integration.png)
 
@@ -104,12 +104,12 @@ Check the DevNet learning lab: ['Deploy a Cisco Spark Integration'](https://lear
 
 ## More about Cisco Spark integrations
 
-Spark Apps incarn Cisco Spark’s extensibility. 
+Spark Apps incarn Cisco Spark’s extensibility.
 
 By creating custom Spark apps, developers can tie together existing software with Cisco Spark and instantly promote their Apps. 
 For example, add the [“Jira Integration”](https://depot.ciscospark.com/integrations/Y2lzY29zcGFyazovL3VzL0FQUExJQ0FUSU9OLzQwYjk2ZTQzLTZkNmQtNDJjZS1iODk0LWU0MmVhNWJjMDJmNA) to Rooms and your teams will be notified as Jira issues (whether EPIC, Story, Task or Bugs) are updated.
 
 Spark integrations are a way for your apps to request permission to invoke the Spark APIs on behalf of other Spark users. 
-The process used to request permission is called an OAuth Grant Flow, and is documented in the [Integrations guide] (https://developer.ciscospark.com/authentication.html). 
+The process used to request permission is called an OAuth Grant Flow, and is documented in the [Integrations guide](https://developer.ciscospark.com/authentication.html).
 
 You can experiment the flow in DevNet Learning lab [“Understand the OAuth Grant flow of Spark Integrations”](https://learninglabs.cisco.com/tracks/collab-cloud/business-messaging/collab-spark-auth/step/1).
