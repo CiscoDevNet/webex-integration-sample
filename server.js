@@ -28,8 +28,7 @@ var clientSecret = process.env.CLIENT_SECRET || "772c2882806539bee681288640608f5
 var port = process.env.PORT || 8080;
 var redirectURI = process.env.REDIRECT_URI || `http://localhost:${port}/oauth`; // where your integration is waiting for Cisco Spark to redirect and send the authorization code
 var state = process.env.STATE || "CiscoDevNet"; // state can be used for security and/or correlation purposes
-var scopes = "spark:people_read"; // extend permission with Spark OAuth scopes required by your example, supported scopes are: https://developer.ciscospark.com/add-integration.html
-
+var scopes = "spark:people_read"; // supported scopes are documented at: https://developer.ciscospark.com/add-integration.html, the scopes separator is a space, example: "spark:people_read spark:rooms_read"
 
 //
 // Step 1: initiate the OAuth flow
@@ -163,12 +162,12 @@ app.get("/oauth", function (req, res) {
             res.send("<h1>OAuth Integration could not complete</h1><p>Sorry, could not retreive your access token. Try again...</p>");
             return;
         }
-
+        debug("OAuth flow completed, fetched tokens: " + JSON.stringify(json));
+        
         // [Optional] Store tokens for future use
         storeTokens(json.access_token,  json.expires_in, json.refresh_token, json.refresh_token_expires_in);
 
         // Cisco Spark OAuth flow completed
-        debug("OAuth flow completed, fetched access token: " + json.access_token);
         oauthFlowCompleted(json.access_token, res);
     });
 });
@@ -230,11 +229,8 @@ function oauthFlowCompleted(access_token, res) {
         }
 
         // Uncomment to send feedback via static HTML code 
-        // res.send("<h1>OAuth Integration example for Cisco Spark (static HTML)</h1><p>So happy to meet, " + json.displayName + " !</p>");
-        // OR leverage an EJS template
-        var disconnectURL = "https://idbroker.webex.com/idb/oauth2/v1/logout?"
-        + "goto=" + encodeURIComponent(`http://localhost:${port}`)
-        + "&token=" + access_token;
+        //res.send("<h1>OAuth Integration example for Cisco Spark (static HTML)</h1><p>So happy to meet, " + json.displayName + " !</p>");
+        // Current code leverages an EJS template:
         var str = read(join(__dirname, '/www/display-name.ejs'), 'utf8');
         var compiled = ejs.compile(str)({ "displayName": json.displayName });        
         res.send(compiled);
@@ -289,8 +285,16 @@ function refreshAccessToken(refresh_token) {
         }
 
         // Refresh token obtained
-        debug("newly issued access token: " + json.access_token);
+        debug("newly issued tokens: " + JSON.stringify(json));
     });
+}
+
+
+function getLogoutURL(token, redirectURL) {
+    var rootURL = redirectURL.substring(0, redirectURL.length - 5);
+    return "https://idbroker.webex.com/idb/oauth2/v1/logout?"
+        + "goto=" + encodeURIComponent(rootURL)
+        + "&token=" + token;
 }
 
 

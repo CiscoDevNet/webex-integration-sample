@@ -1,19 +1,14 @@
 {
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Integration",
             "type": "node",
             "request": "launch",
-            "program": "${workspaceRoot}/server.js",
-            "stopOnEntry": false,
-            "args": [],
-            "cwd": "${workspaceRoot}",
-            "preLaunchTask": null,
-            "runtimeExecutable": null,
-            "runtimeArgs": [
-                "--nolazy"
-            ],
+            "name": "Launch Program",
+            "program": "${workspaceFolder}/server.js",
             "env": {
                 "NODE_ENV": "development",
                 "DEBUG": "oauth*",
@@ -21,10 +16,7 @@
                 "REDIRECT_URI": "http://localhost:8080/oauth", 
                 "CLIENT_ID": "C4ae9568c6cf4576abbc58c183b69f466c6ea6a7d3b8f0f22a60d6775f36d5aed",
                 "CLIENT_SECRET": "772c2882806539bee681288640608f5ec2e6afbc11010e74d8bd11c941893096"
-            },
-            "externalConsole": false,
-            "sourceMaps": false,
-            "outDir": null
+            }
         }
     ]
 }
