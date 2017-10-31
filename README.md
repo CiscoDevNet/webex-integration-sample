@@ -85,14 +85,14 @@ Instructions for **Windows command shell users**
 - open a command shell
 - enter the commands below:
 
-```shell
-set DEBUG="oauth*"
-set PORT=9090
-set REDIRECT_URI="http://localhost:8080/oauth" 
-set CLIENT_ID="YOUR_INTEGRATION_ID" 
-set CLIENT_SECRET="YOUR_INTEGRATION_SECRET" 
-node server.js
-```
+    ```shell
+    set DEBUG="oauth*"
+    set PORT=9090
+    set REDIRECT_URI="http://localhost:9090/oauth"
+    set CLIENT_ID="YOUR_INTEGRATION_ID"
+    set CLIENT_SECRET="YOUR_INTEGRATION_SECRET"
+    node server.js
+    ```
 
 **You're all set. Restart your integration, and give it a try: [http://localhost:9090](http://localhost:9090)**
 
