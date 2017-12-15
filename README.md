@@ -102,6 +102,28 @@ In the real-world, you will want to deploy your integration, and register its pu
 Check the DevNet learning lab: ['Deploy a Cisco Spark Integration'](https://learninglabs.cisco.com/tracks/devnet-express-cloud-collab-soft-dev/creating-spark-integrations-sd/collab-spark-intd-heroku/step/1) for detailled instructions.
 
 
+## Spark Widget
+
+Now that you know the basics about Cisco Spark integrations, you can leverage other REST Resources but also the Spark SDKs and Widgets.
+
+To experiment with the Spark Widget, simply launch the `widget.js` sample with 2 environment variables:
+- BOT_TOKEN: place the token of a bot
+- SPACE_ID: place the identifer of a Space that the bot is part of
+
+Once granted authorization to open the widget, the sample will add the user to a demo space, and display the Space Widget. 
+
+_Note that the OAuth list of scopes has been changed to `spark:all` as required by the Spark Widget.
+If you want to run this sample, you'll need to open the Spark for developers portal, and modify the list of scopes that can be requested by your Spark Integration to spark:all._
+
+```
+BOT_TOKEN=<your-token> SPACE_ID=<demo-space> node widget.js
+```
+
+![](docs/img/Space-Widget.png)
+
+
+
+
 ## More about Cisco Spark integrations
 
 Spark Apps incarn Cisco Spark’s extensibility.

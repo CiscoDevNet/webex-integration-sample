@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>>Cisco Spark Integration (OAuth flow)</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <link rel="stylesheet" href="https://code.s4d.io/widget-space/production/main.css">
+</head>
+
+<body>
+  <h1>OAuth Integration example: Space Widget</h1>
+
+  <div id="space" style="width: 750px; height: 500px;"       
+    data-toggle="ciscospark-space"
+    data-initial-activity="message"
+    data-access-token=<%= token %> 
+    data-space-id=<%= spaceId %>
+  </div>
+
+  <script src="https://code.s4d.io/widget-space/production/bundle.js"></script>
+
+</body>
+
+</html>

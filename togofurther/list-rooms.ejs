@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>>Cisco Spark Integration (OAuth flow)</title>
-    <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="styles.css">
-  </head>
-  <body>
-    <div id="content">
-      <h1>OAuth Integration example for Cisco Spark (EJS template)</h1>
-      <p>Here are your rooms:</p>
-      <ul>
-        <% rooms.forEach(function(room) { %>
-            <li><%= room.title %>: <%= room.id %></li>
+
+<head>
+  <title>Cisco Spark Integration (OAuth flow)</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+
+<body>
+  <div id="content">
+    <h1>OAuth Integration example: Spaces List</h1>
+    <p>Here are the latest active Spaces that you are part of:</p>
+    <ul>
+      <% rooms.forEach(function(room) { %>
+        <li>
+          <%= room.title %>:
+            <%= room.id %>
+        </li>
         <% }); %>
-     </ul>
-    </div>
-  </body>
+    </ul>
+  </div>
+</body>
+
 </html>
