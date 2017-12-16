@@ -6,3 +6,7 @@ a.button {
     text-decoration: none;
     color: initial;
 }
+
+.ciscospark-activity-menu-button-wrapper {
+    visibility: hidden
+}
