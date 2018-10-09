@@ -301,5 +301,5 @@ function getLogoutURL(token, redirectURL) {
 
 // Starts the Webex Integration
 app.listen(port, function () {
-    debug("Webex OAuth Integration started on port: " + port);
+    console.log("Webex OAuth Integration started on port: " + port);
 });

@@ -249,5 +249,5 @@ if (!process.env.BOT_TOKEN || !process.env.SPACE_ID) {
 
 // Starts the OAuth Integration
 app.listen(port, function () {
-    debug("Webex OAuth Integration started on port: " + port);
+    console.log("Webex OAuth Integration started on port: " + port);
 });
