@@ -4,10 +4,10 @@
 //
 
 /*
- * a Cisco Spark Integration based on nodejs, that acts on user's behalf.
- * implements the Cisco Spark OAuth flow, to retreive Cisco Spark API access tokens.
+ * a Webex Teams Integration based on Node.js, that acts on user's behalf.
+ * implements the Webex OAuth flow, to retreive an API access tokens.
  * 
- * See documentation: https://developer.ciscospark.com/authentication.html
+ * See documentation: https://developer.webex.com/authentication.html
  * 
  */
 
@@ -20,19 +20,19 @@ var app = express();
 
 
 //
-// Step 0: create a Spark integration from https://developer.ciscospark.com/add-integration.html
+// Step 0: create an OAuth integration from https://developer.ciscospark.com/add-integration.html
 //   - then fill in your Integration properties below
 //
 var clientId = process.env.CLIENT_ID || "C4ae9568c6cf4576abbc58c183b69f466c6ea6a7d3b8f0f22a60d6775f36d5aed";
 var clientSecret = process.env.CLIENT_SECRET || "772c2882806539bee681288640608f5ec2e6afbc11010e74d8bd11c941893096";
 var port = process.env.PORT || 8080;
-var redirectURI = process.env.REDIRECT_URI || `http://localhost:${port}/oauth`; // where your integration is waiting for Cisco Spark to redirect and send the authorization code
+var redirectURI = process.env.REDIRECT_URI || `http://localhost:${port}/oauth`; // where your integration is waiting for Webex cloud to redirect and send the authorization code
 var state = process.env.STATE || "CiscoDevNet"; // state can be used for security and/or correlation purposes
-var scopes = "spark:people_read"; // supported scopes are documented at: https://developer.ciscospark.com/add-integration.html, the scopes separator is a space, example: "spark:people_read spark:rooms_read"
+var scopes = "spark:people_read"; // supported scopes are documented at: https://developer.webex.com/add-integration.html, the scopes separator is a space, example: "spark:people_read spark:rooms_read"
 
 //
 // Step 1: initiate the OAuth flow
-//   - serves a Web page with a link to the Cisco Spark OAuth flow initializer
+//   - serves a Web page with a link to the Webex OAuth flow initializer
 //
 // Initiate the OAuth flow from the 'index.ejs' template  
 // ------------------------------------------------------------- 
@@ -86,7 +86,7 @@ app.get("/oauth", function (req, res) {
 
         if (req.query.error == "server_error") {
             debug("server error, received err: " + req.query.error);
-            res.send("<h1>OAuth Integration could not complete</h1><p>Cisco Spark sent a Server Error, Auf Wiedersehen.</p>");
+            res.send("<h1>OAuth Integration could not complete</h1><p>Webex sent a server error, Auf Wiedersehen.</p>");
             return;
         }
 
@@ -133,7 +133,7 @@ app.get("/oauth", function (req, res) {
     };
     request(options, function (error, response, body) {
         if (error) {
-            debug("could not reach Cisco Spark to retreive access & refresh tokens");
+            debug("could not reach Webex cloud to retreive access & refresh tokens");
             res.send("<h1>OAuth Integration could not complete</h1><p>Sorry, could not retreive your access token. Try again...</p>");
             return;
         }
@@ -167,7 +167,7 @@ app.get("/oauth", function (req, res) {
         // [Optional] Store tokens for future use
         storeTokens(json.access_token,  json.expires_in, json.refresh_token, json.refresh_token_expires_in);
 
-        // Cisco Spark OAuth flow completed
+        // OAuth flow has completed
         oauthFlowCompleted(json.access_token, res);
     });
 });
@@ -175,11 +175,11 @@ app.get("/oauth", function (req, res) {
 
 //
 // Step 3: this is where the integration runs its custom logic
-//   - this function is called as the Cisco Spark OAuth flow has been successfully completed, 
+//   - this function is called as the OAuth flow has been successfully completed, 
 //   - this function is expected to send back an HTML page to the end-user
 //   
 // some optional activities to perform here: 
-//    - associate the issued Spark access token to a user through the state (acting as a Correlation ID)
+//    - associate the issued access token to a user through the state (acting as a Correlation ID)
 //    - store the refresh token (valid 90 days) to reissue later a new access token (valid 14 days)
 function oauthFlowCompleted(access_token, res) {
 
@@ -199,15 +199,15 @@ function oauthFlowCompleted(access_token, res) {
 
     request(options, function (error, response, body) {
         if (error) {
-            debug("could not reach Cisco Spark to retreive Person's details, error: " + error);
-            res.send("<h1>OAuth Integration could not complete</h1><p>Sorry, could not retreive your Cisco Spark account details. Try again...</p>");
+            debug("could not reach Webex API to retreive Person's details, error: " + error);
+            res.send("<h1>OAuth Integration could not complete</h1><p>Sorry, could not retreive your Webex Teams account details. Try again...</p>");
             return;
         }
 
         // Check the call is successful
         if (response.statusCode != 200) {
             debug("could not retreive your details, /people/me returned: " + response.statusCode);
-            res.send("<h1>OAuth Integration could not complete</h1><p>Sorry, could not retreive your Cisco Spark account details. Try again...</p>");
+            res.send("<h1>OAuth Integration could not complete</h1><p>Sorry, could not retreive your Webex Teams account details. Try again...</p>");
             return;
         }
 
@@ -224,12 +224,12 @@ function oauthFlowCompleted(access_token, res) {
         var json = JSON.parse(body);
         if ((!json) || (!json.displayName)) {
             debug("could not parse Person details: bad json payload or could not find a displayName.");
-            res.send("<h1>OAuth Integration could not complete</h1><p>Sorry, could not retreive your Cisco Spark account details. Try again...</p>");
+            res.send("<h1>OAuth Integration could not complete</h1><p>Sorry, could not retreive your Webx Teams account details. Try again...</p>");
             return;
         }
 
         // Uncomment to send feedback via static HTML code 
-        //res.send("<h1>OAuth Integration example for Cisco Spark (static HTML)</h1><p>So happy to meet, " + json.displayName + " !</p>");
+        //res.send("<h1>OAuth Integration example for Webex (static HTML)</h1><p>So happy to meet, " + json.displayName + " !</p>");
         // Current code leverages an EJS template:
         var str = read(join(__dirname, '/www/display-name.ejs'), 'utf8');
         var compiled = ejs.compile(str)({ "displayName": json.displayName });        
@@ -238,7 +238,7 @@ function oauthFlowCompleted(access_token, res) {
 }
 
 
-// The idea here is to store the access token for future use, and the expiration dates and refresh_token to have Cisco Spark issue a new access token
+// The idea here is to store the access token for future use, and the expiration dates and refresh_token to have Webex cloud issue a new access token
 function storeTokens(access_token, expires_in, refresh_token, refresh_token_expires_in) {
 
     // Store the token in some secure backend
@@ -268,7 +268,7 @@ function refreshAccessToken(refresh_token) {
     };
     request(options, function (error, response, body) {
         if (error) {
-            debug("could not reach Cisco Spark to refresh access token");
+            debug("could not reach Webex cloud to refresh access token");
             return;
         }
 
@@ -299,7 +299,7 @@ function getLogoutURL(token, redirectURL) {
 
 
 
-// Starts the Cisco Spark Integration
+// Starts the Webex Integration
 app.listen(port, function () {
-    debug("Cisco Spark OAuth Integration started on port: " + port);
+    debug("Webex OAuth Integration started on port: " + port);
 });
