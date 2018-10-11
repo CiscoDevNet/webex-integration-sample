@@ -2,7 +2,7 @@
 
 This Webex Integration example illustrates an OAuth Grant flow at the end of which the Webex Teams user who granted permission will see his fullname displayed.
 
-This code sample comes as a companion to the DevNet learning lab: [Run a Cisco Spark Integration locally](https://learninglabs.cisco.com/tracks/collab-cloud/spark-apps/collab-spark-intl/step/1).
+This code sample comes as a companion to the DevNet learning lab: [Run a Webex Teams Integration locally](https://learninglabs.cisco.com/tracks/collab-cloud/spark-apps/collab-spark-intl/step/1).
 
 ![](docs/img/OAuth-Flow-Sumpup.png)
 
@@ -54,7 +54,7 @@ Fill the form fields:
 - **Name**: your app name, such as 'My Awesome App' in the snapshot below,
 - **Description**: these details are not displayed to your app end-users,
 - **Support email**: a valid email address for Webex Spark operations team to reach to you if necessary,
-- **App Icon**: a 512x512 file or simply pick one of the default icons. Feel free to use this provided sample for now: [https://bit.ly/SparkIntegration-512x512](https://bit.ly/SparkIntegration-512x512)
+- **App Icon**: simply pick one of the default icons or upload a 512x512 file. Feel free to use this provided sample for now: [https://bit.ly/SparkIntegration-512x512](https://bit.ly/SparkIntegration-512x512)
 - **Redirect URI**: enter `http://localhost:9090/oauth` since this is the URL at which the provided code sample will be listening on your local machine. More to come in the next steps if this lab
 - **Scopes**: select the `spark:people_read` and `spark:rooms_read` scopes.
 
@@ -122,9 +122,6 @@ BOT_TOKEN=<your-token> SPACE_ID=<demo-space> node widget.js
 
 
 ## More about Webex Integrations
-
-By creating custom Webex Apps, developers can tie together existing software with Webex, and instantly promote their Apps. 
-For example, add the ["Jira Integration"](https://depot.ciscospark.com/integrations/Y2lzY29zcGFyazovL3VzL0FQUExJQ0FUSU9OLzQwYjk2ZTQzLTZkNmQtNDJjZS1iODk0LWU0MmVhNWJjMDJmNA) to existing Teams spaces, and your teams will be notified as Jira issues (whether EPIC, Story, Task or Bugs) are updated.
 
 Webex Integrations are a way for your apps to request permission to invoke the Webex APIs on behalf of Webex Teams users. 
 The process used to request permission is called an OAuth Grant Flow, and is documented in the [Integrations guide](https://developer.webex.com/authentication.html).
