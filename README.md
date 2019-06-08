@@ -2,7 +2,7 @@
 
 This Webex Integration example illustrates an OAuth Grant flow at the end of which the Webex Teams user who granted permission will see his fullname displayed.
 
-This code sample comes as a companion to the DevNet learning lab: [Run a Webex Teams Integration locally](https://learninglabs.cisco.com/tracks/collab-cloud/spark-apps/collab-spark-intl/step/1).
+This code sample comes as a companion to the DevNet learning lab: [Run a Webex Teams Integration locally](https://developer.cisco.com/learning/tracks/collab-cloud/spark-apps/collab-spark-intl/step/1).
 
 ![](docs/img/OAuth-Flow-Sumpup.png)
 

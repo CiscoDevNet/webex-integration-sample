@@ -1,6 +1,6 @@
 {
   "name": "webex-integration-sample",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "an example of Webex Integration (OAuth flow) in Node?js",
   "main": "server.js",
   "scripts": {
@@ -9,9 +9,10 @@
   "author": "Stève Sfartz (Cisco DevNet)",
   "license": "MIT",
   "dependencies": {
-    "debug": "^4.1.0",
+    "debug": "^4.1.1",
     "ejs": "^2.6.1",
-    "express": "^4.16.3",
+    "express": "^4.17.1",
+    "node-env-file": "^0.1.8",
     "node-sparky": "^4.6.0",
     "request": "^2.88.0"
   }

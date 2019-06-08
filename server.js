@@ -11,6 +11,9 @@
  * 
  */
 
+ // Load environment variables from project .env file
+require('node-env-file')(__dirname + '/.env');
+
 var debug = require("debug")("oauth");
 var fine = require("debug")("oauth:fine");
 
