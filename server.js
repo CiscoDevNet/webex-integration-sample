@@ -14,47 +14,52 @@
  // Load environment variables from project .env file
 require('node-env-file')(__dirname + '/.env');
 
-var debug = require("debug")("oauth");
-var fine = require("debug")("oauth:fine");
+const debug = require("debug")("oauth");
+const fine = require("debug")("oauth:fine");
 
-var request = require("request");
-var express = require('express');
-var app = express();
+const request = require("request");
+const express = require('express');
+const app = express();
 
 
-//
 // Step 0: create an OAuth integration from https://developer.ciscospark.com/add-integration.html
 //   - then fill in your Integration properties below
 //
-var clientId = process.env.CLIENT_ID || "C4ae9568c6cf4576abbc58c183b69f466c6ea6a7d3b8f0f22a60d6775f36d5aed";
-var clientSecret = process.env.CLIENT_SECRET || "772c2882806539bee681288640608f5ec2e6afbc11010e74d8bd11c941893096";
-var port = process.env.PORT || 8080;
-var redirectURI = process.env.REDIRECT_URI || `http://localhost:${port}/oauth`; // where your integration is waiting for Webex cloud to redirect and send the authorization code
-var state = process.env.STATE || "CiscoDevNet"; // state can be used for security and/or correlation purposes
-var scopes = "spark:people_read"; // supported scopes are documented at: https://developer.webex.com/add-integration.html, the scopes separator is a space, example: "spark:people_read spark:rooms_read"
+const clientId = process.env.CLIENT_ID || "C4ae9568c6cf4576abbc58c183b69f466c6ea6a7d3b8f0f22a60d6775f36d5aed";
+const clientSecret = process.env.CLIENT_SECRET || "772c2882806539bee681288640608f5ec2e6afbc11010e74d8bd11c941893096";
+const port = process.env.PORT || 8080;
+const redirectURI = process.env.REDIRECT_URI || `http://localhost:${port}/oauth`; // where your integration is waiting for Webex cloud to redirect and send the authorization code
+const scopes = process.env.SCOPES || "spark:people_read"; // supported scopes are documented at: https://developer.webex.com/add-integration.html, the scopes separator is a space, example: "spark:people_read spark:rooms_read"
 
-//
+
 // Step 1: initiate the OAuth flow
 //   - serves a Web page with a link to the Webex OAuth flow initializer
 //
 // Initiate the OAuth flow from the 'index.ejs' template  
 // ------------------------------------------------------------- 
 // -- Comment this section to initiate the flow from  static html page
-var initiateURL = "https://api.ciscospark.com/v1/authorize?"
+
+// state can be used for security and/or correlation purposes
+const state = process.env.STATE || "CiscoDevNet"; 
+
+const initiateURL = "https://api.ciscospark.com/v1/authorize?"
     + "client_id=" + clientId
     + "&response_type=code"
     + "&redirect_uri=" + encodeURIComponent(redirectURI)
     + "&scope=" + encodeURIComponent(scopes)
     + "&state=" + state;
-var read = require("fs").readFileSync;
-var join = require("path").join;
-var str = read(join(__dirname, '/www/index.ejs'), 'utf8');
-var ejs = require("ejs");
-var compiled = ejs.compile(str)({ "link": initiateURL }); // inject the link into the template
+    
+const read = require("fs").readFileSync;
+const join = require("path").join;
+const str = read(join(__dirname, '/www/index.ejs'), 'utf8');
+const ejs = require("ejs");
+const compiled = ejs.compile(str)({ "link": initiateURL }); // inject the link into the template
+
 app.get("/index.html", function (req, res) {
     debug("serving the integration home page (generated from an EJS template)");
     res.send(compiled);
 });
+
 app.get("/", function (req, res) {
     res.redirect("/index.html");
 });
@@ -63,11 +68,10 @@ app.get("/", function (req, res) {
 // Statically serve the "/www" directory
 // WARNING: Do not move the 2 lines of code below, as we need this exact precedance order for the static and dynamic HTML generation to work correctly all together
 //          If the section above is commented, the static index.html page will be served instead of the EJS template.
-var path = require('path');
+const path = require('path');
 app.use("/", express.static(path.join(__dirname, 'www')));
 
 
-//
 // Step 2: process OAuth Authorization codes
 //
 app.get("/oauth", function (req, res) {
@@ -120,7 +124,7 @@ app.get("/oauth", function (req, res) {
     //      "refresh_token":"NjBjNDk3MjktMjUwMy00YTlkLWJkOTctM2E2MjE3YWU1NmI4Njk3Y2IzODctMjBh",
     //      "refresh_token_expires_in":7775999
     //   }
-    var options = {
+    const options = {
         method: "POST",
         url: "https://api.ciscospark.com/v1/access_token",
         headers: {
@@ -145,7 +149,7 @@ app.get("/oauth", function (req, res) {
             debug("access token not issued with status code: " + response.statusCode);
             switch (response.statusCode) {
                 case 400:
-                    var responsePayload = JSON.parse(response.body);
+                    const responsePayload = JSON.parse(response.body);
                     res.send("<h1>OAuth Integration could not complete</h1><p>Bad request. <br/>" + responsePayload.message + "</p>");
                     break;
                 case 401:
@@ -159,7 +163,7 @@ app.get("/oauth", function (req, res) {
         }
 
         // Check payload
-        var json = JSON.parse(body);
+        const json = JSON.parse(body);
         if ((!json) || (!json.access_token) || (!json.expires_in) || (!json.refresh_token) || (!json.refresh_token_expires_in)) {
             debug("could not parse access & refresh tokens");
             res.send("<h1>OAuth Integration could not complete</h1><p>Sorry, could not retreive your access token. Try again...</p>");
@@ -176,7 +180,6 @@ app.get("/oauth", function (req, res) {
 });
 
 
-//
 // Step 3: this is where the integration runs its custom logic
 //   - this function is called as the OAuth flow has been successfully completed, 
 //   - this function is expected to send back an HTML page to the end-user
@@ -191,7 +194,7 @@ function oauthFlowCompleted(access_token, res) {
     //
 
     // Retreive user name: GET https://api.ciscospark.com/v1/people/me
-    var options = {
+    const options = {
         method: 'GET',
         url: 'https://api.ciscospark.com/v1/people/me',
         headers:
@@ -224,7 +227,7 @@ function oauthFlowCompleted(access_token, res) {
         //      "avatar": "https://1efa7a94ed216783e352-c62266528714497a17239ececf39e9e2.ssl.cf1.rackcdn.com/V1~c2582d2fb9d11e359e02b12c17800f09~aqSu09sCTVOOx45HJCbWHg==~1600",
         //      "created": "2016-02-04T15:46:20.321Z"
         //    }
-        var json = JSON.parse(body);
+        const json = JSON.parse(body);
         if ((!json) || (!json.displayName)) {
             debug("could not parse Person details: bad json payload or could not find a displayName.");
             res.send("<h1>OAuth Integration could not complete</h1><p>Sorry, could not retreive your Webx Teams account details. Try again...</p>");
@@ -234,8 +237,8 @@ function oauthFlowCompleted(access_token, res) {
         // Uncomment to send feedback via static HTML code 
         //res.send("<h1>OAuth Integration example for Webex (static HTML)</h1><p>So happy to meet, " + json.displayName + " !</p>");
         // Current code leverages an EJS template:
-        var str = read(join(__dirname, '/www/display-name.ejs'), 'utf8');
-        var compiled = ejs.compile(str)({ "displayName": json.displayName });        
+        const str = read(join(__dirname, '/www/display-name.ejs'), 'utf8');
+        const compiled = ejs.compile(str)({ "displayName": json.displayName });        
         res.send(compiled);
     });
 }
@@ -256,7 +259,7 @@ function storeTokens(access_token, expires_in, refresh_token, refresh_token_expi
 //
 function refreshAccessToken(refresh_token) {
 
-    var options = {
+   const options = {
         method: "POST",
         url: "https://api.ciscospark.com/v1/access_token",
         headers: {
@@ -281,7 +284,7 @@ function refreshAccessToken(refresh_token) {
         }
 
         // Check payload
-        var json = JSON.parse(body);
+        const json = JSON.parse(body);
         if ((!json) || (!json.access_token) || (!json.expires_in) || (!json.refresh_token) || (!json.refresh_token_expires_in)) {
             debug("could not parse response");
             return;
@@ -294,7 +297,7 @@ function refreshAccessToken(refresh_token) {
 
 
 function getLogoutURL(token, redirectURL) {
-    var rootURL = redirectURL.substring(0, redirectURL.length - 5);
+   const rootURL = redirectURL.substring(0, redirectURL.length - 5);
     return "https://idbroker.webex.com/idb/oauth2/v1/logout?"
         + "goto=" + encodeURIComponent(rootURL)
         + "&token=" + token;
