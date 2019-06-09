@@ -14,8 +14,8 @@
                 "DEBUG": "oauth*",
                 "PORT": "8080",
                 "REDIRECT_URI": "http://localhost:8080/oauth", 
-                "CLIENT_ID": "C4ae9568c6cf4576abbc58c183b69f466c6ea6a7d3b8f0f22a60d6775f36d5aed",
-                "CLIENT_SECRET": "772c2882806539bee681288640608f5ec2e6afbc11010e74d8bd11c941893096"
+                "CLIENT_ID": "C4d2626189e40ffbde5f8d2948650bda5b4261804986bb3a977b079d2af2d7d93",
+                "CLIENT_SECRET": "81772d83ee75a5835d2b19a1c9e95b47bf6618a3a736e361c5324dc18e7183e8"
             }
         }
     ]
